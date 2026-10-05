@@ -1,0 +1,24 @@
+---
+- name: Deploy Flyora Flight Booking Application Container
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure persistent Docker volume exists
+      community.docker.docker_volume:
+        name: flyora_data
+        state: present
+
+    - name: Deploy and configure Flyora application container
+      community.docker.docker_container:
+        name: flyora-app-ansible
+        image: flyora-flight-booking-ci
+        state: started
+        restart_policy: always
+        recreate: yes
+        published_ports:
+          - "5001:5000"
+        volumes:
+          - "flyora_data:/app/data"
+        env:
+          DATA_DIR: "/app/data"
+          PORT: "5000"

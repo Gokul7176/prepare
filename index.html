@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flyora India – Smart Flight Booking System | Domestic & International Fares in INR (₹)</title>
+  <meta name="description" content="Book cheap domestic & international flights across India. Real-time Indian airline fares (IndiGo, Air India, Vistara, SpiceJet, Akasa Air) in INR (₹), DigiYatra boarding passes, seat selection, and live radar.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Main Navigation -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-container">
+      <a href="#" class="brand-logo" id="brandLogo">
+        <div class="logo-icon-wrap">
+          <i data-lucide="plane" class="logo-icon"></i>
+        </div>
+        <div class="logo-text-wrap">
+          <span class="logo-name">Fly<span class="gradient-text">ora</span></span>
+          <span class="logo-tagline">INDIA SKIES</span>
+        </div>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#searchSection" class="nav-link active"><i data-lucide="compass"></i> Explore</a>
+        <a href="#flightTracker" class="nav-link"><i data-lucide="radar"></i> Live Radar</a>
+        <a href="#destinationsSection" class="nav-link"><i data-lucide="map-pin"></i> Destinations</a>
+        <a href="#dealsSection" class="nav-link"><i data-lucide="sparkles"></i> Deals</a>
+        <button class="nav-link ai-copilot-trigger" id="aiCopilotBtn">
+          <i data-lucide="bot"></i> Flyora AI <span class="badge-pulse">Beta</span>
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Currency Selector (Default INR) -->
+        <div class="custom-dropdown" id="currencyDropdown">
+          <button class="dropdown-trigger" id="currencyBtn" aria-label="Select Currency">
+            <span class="currency-flag" id="currentCurrencyFlag">🇮🇳</span>
+            <span id="currentCurrencyCode">INR (₹)</span>
+            <i data-lucide="chevron-down" class="dropdown-arrow"></i>
+          </button>
+          <div class="dropdown-menu" id="currencyMenu">
+            <button class="dropdown-item active" data-currency="INR" data-symbol="₹" data-rate="1" data-flag="🇮🇳">🇮🇳 INR (₹)</button>
+            <button class="dropdown-item" data-currency="USD" data-symbol="$" data-rate="0.012" data-flag="🇺🇸">🇺🇸 USD ($)</button>
+            <button class="dropdown-item" data-currency="EUR" data-symbol="€" data-rate="0.011" data-flag="🇪🇺">🇪🇺 EUR (€)</button>
+            <button class="dropdown-item" data-currency="GBP" data-symbol="£" data-rate="0.0095" data-flag="🇬🇧">🇬🇧 GBP (£)</button>
+            <button class="dropdown-item" data-currency="AED" data-symbol="AED " data-rate="0.044" data-flag="🇦🇪">🇦🇪 AED (د.إ)</button>
+            <button class="dropdown-item" data-currency="JPY" data-symbol="¥" data-rate="1.85" data-flag="🇯🇵">🇯🇵 JPY (¥)</button>
+          </div>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle dark/light theme" title="Toggle theme">
+          <i data-lucide="sun" class="sun-icon"></i>
+          <i data-lucide="moon" class="moon-icon"></i>
+        </button>
+
+        <!-- Bookings / Trips Drawer Button -->
+        <button class="my-trips-btn" id="myTripsBtn">
+          <i data-lucide="ticket"></i>
+          <span>My Trips</span>
+          <span class="trips-count-badge" id="tripsCountBadge">0</span>
+        </button>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero & Search Section -->
+  <main class="main-content">
+    <section class="hero-section" id="searchSection">
+      <div class="hero-backdrop-glow"></div>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i data-lucide="sparkles"></i> India's #1 AI Flight Booking Engine
+        </div>
+        <h1 class="hero-title">
+          Elevate Your Journey Across <br>
+          <span class="gradient-text">Incredible India</span>
+        </h1>
+        <p class="hero-subtitle">
+          Real-time fare intelligence on IndiGo, Air India, Vistara, Akasa Air & SpiceJet. Interactive 3D cabin seat maps, DigiYatra-ready boarding passes, and instant UPI ticketing in Indian Rupees (₹).
+        </p>
+
+        <!-- Live Metrics Bar -->
+        <div class="hero-metrics-bar">
+          <div class="metric-item">
+            <span class="metric-val">500+</span>
+            <span class="metric-lbl">Indian Routes</span>
+          </div>
+          <div class="metric-sep"></div>
+          <div class="metric-item">
+            <span class="metric-val">99.6%</span>
+            <span class="metric-lbl">Fare Accuracy</span>
+          </div>
+          <div class="metric-sep"></div>
+          <div class="metric-item">
+            <span class="metric-val">₹0</span>
+            <span class="metric-lbl">Hidden Surcharges</span>
+          </div>
+          <div class="metric-sep"></div>
+          <div class="metric-item">
+            <span class="metric-val">< 15s</span>
+            <span class="metric-lbl">Instant UPI Ticketing</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Booking Engine Card -->
+      <div class="booking-engine-wrapper">
+        <div class="booking-engine-card glass-panel" id="bookingCard">
+          
+          <!-- Trip Mode Selector -->
+          <div class="engine-top-bar">
+            <div class="trip-type-selector" role="tablist">
+              <button class="trip-type-btn active" data-trip="one-way" id="tabOneWay" role="tab" aria-selected="true">
+                <i data-lucide="arrow-right"></i> One Way
+              </button>
+              <button class="trip-type-btn" data-trip="round-trip" id="tabRoundTrip" role="tab" aria-selected="false">
+                <i data-lucide="arrow-left-right"></i> Round Trip
+              </button>
+              <button class="trip-type-btn" data-trip="multi-city" id="tabMultiCity" role="tab" aria-selected="false">
+                <i data-lucide="git-merge"></i> Multi-City
+              </button>
+            </div>
+
+            <div class="fare-type-pills">
+              <span class="fare-label">Special Fares:</span>
+              <label class="fare-pill active">
+                <input type="radio" name="fareType" value="regular" checked>
+                <span>Regular</span>
+              </label>
+              <label class="fare-pill">
+                <input type="radio" name="fareType" value="student">
+                <span>Student (Extra 10kg)</span>
+              </label>
+              <label class="fare-pill">
+                <input type="radio" name="fareType" value="senior">
+                <span>Senior Citizen (15% Off)</span>
+              </label>
+              <label class="fare-pill">
+                <input type="radio" name="fareType" value="armed">
+                <span>Armed Forces</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Search Inputs Grid -->
+          <form id="flightSearchForm" class="search-form-grid" onsubmit="return false;">
+            
+            <!-- Origin Input -->
+            <div class="input-card autocomplete-wrapper" id="originWrapper">
+              <div class="input-label-row">
+                <span class="input-icon-lbl"><i data-lucide="plane-takeoff"></i> From</span>
+                <span class="sub-label">Departure Airport</span>
+              </div>
+              <div class="input-field-wrap">
+                <input type="text" id="originInput" class="main-input" placeholder="City or Airport (e.g. DEL, New Delhi)" autocomplete="off" value="New Delhi (DEL)" required>
+                <div class="airport-code-badge" id="originCodeBadge">DEL</div>
+              </div>
+              <div class="autocomplete-dropdown" id="originDropdown"></div>
+            </div>
+
+            <!-- Swap Button -->
+            <button type="button" class="swap-locations-btn" id="swapLocationsBtn" title="Swap Origin and Destination" aria-label="Swap Locations">
+              <i data-lucide="arrow-left-right"></i>
+            </button>
+
+            <!-- Destination Input -->
+            <div class="input-card autocomplete-wrapper" id="destWrapper">
+              <div class="input-label-row">
+                <span class="input-icon-lbl"><i data-lucide="plane-land"></i> To</span>
+                <span class="sub-label">Arrival Destination</span>
+              </div>
+              <div class="input-field-wrap">
+                <input type="text" id="destInput" class="main-input" placeholder="City or Airport (e.g. BOM, Mumbai)" autocomplete="off" value="Mumbai (BOM)" required>
+                <div class="airport-code-badge" id="destCodeBadge">BOM</div>
+              </div>
+              <div class="autocomplete-dropdown" id="destDropdown"></div>
+            </div>
+
+            <!-- Departure Date -->
+            <div class="input-card" id="departDateCard">
+              <div class="input-label-row">
+                <span class="input-icon-lbl"><i data-lucide="calendar"></i> Departure</span>
+                <span class="sub-label" id="departDayName">Next Friday</span>
+              </div>
+              <div class="input-field-wrap">
+                <input type="date" id="departDateInput" class="main-input date-input" required>
+              </div>
+            </div>
+
+            <!-- Return Date (Only in Round Trip) -->
+            <div class="input-card return-date-card disabled" id="returnDateCard">
+              <div class="input-label-row">
+                <span class="input-icon-lbl"><i data-lucide="calendar-check"></i> Return</span>
+                <span class="sub-label" id="returnDayName">Optional</span>
+              </div>
+              <div class="input-field-wrap">
+                <input type="date" id="returnDateInput" class="main-input date-input" disabled>
+              </div>
+            </div>
+
+            <!-- Passengers & Class -->
+            <div class="input-card custom-selector-card" id="passengerCard">
+              <div class="input-label-row">
+                <span class="input-icon-lbl"><i data-lucide="users"></i> Travelers & Class</span>
+                <span class="sub-label" id="cabinClassLabel">Economy</span>
+              </div>
+              <div class="input-field-wrap passenger-display" id="passengerDisplayBtn">
+                <div class="traveler-summary-text">
+                  <strong id="totalTravelersCount">1 Traveler</strong>, <span id="summaryCabinClass">Economy</span>
+                </div>
+                <i data-lucide="chevron-down" class="dropdown-arrow"></i>
+              </div>
+
+              <!-- Passengers Popup -->
+              <div class="passengers-popover" id="passengersPopover">
+                <div class="passenger-counter-row">
+                  <div class="pax-meta">
+                    <span class="pax-type">Adults</span>
+                    <span class="pax-age">Age 12+</span>
+                  </div>
+                  <div class="counter-stepper">
+                    <button type="button" class="step-btn" data-type="adult" data-dir="-1">-</button>
+                    <span class="count-val" id="adultCount">1</span>
+                    <button type="button" class="step-btn" data-type="adult" data-dir="1">+</button>
+                  </div>
+                </div>
+
+                <div class="passenger-counter-row">
+                  <div class="pax-meta">
+                    <span class="pax-type">Children</span>
+                    <span class="pax-age">Age 2 - 11</span>
+                  </div>
+                  <div class="counter-stepper">
+                    <button type="button" class="step-btn" data-type="child" data-dir="-1">-</button>
+                    <span class="count-val" id="childCount">0</span>
+                    <button type="button" class="step-btn" data-type="child" data-dir="1">+</button>
+                  </div>
+                </div>
+
+                <div class="passenger-counter-row">
+                  <div class="pax-meta">
+                    <span class="pax-type">Infants</span>
+                    <span class="pax-age">Under 2 yrs</span>
+                  </div>
+                  <div class="counter-stepper">
+                    <button type="button" class="step-btn" data-type="infant" data-dir="-1">-</button>
+                    <span class="count-val" id="infantCount">0</span>
+                    <button type="button" class="step-btn" data-type="infant" data-dir="1">+</button>
+                  </div>
+                </div>
+
+                <div class="pax-divider"></div>
+                <div class="cabin-class-picker">
+                  <span class="cabin-title">Cabin Class</span>
+                  <div class="cabin-options-grid">
+                    <label class="cabin-pill active">
+                      <input type="radio" name="cabinClass" value="economy" checked>
+                      <span>Economy</span>
+                    </label>
+                    <label class="cabin-pill">
+                      <input type="radio" name="cabinClass" value="premium">
+                      <span>Premium Economy</span>
+                    </label>
+                    <label class="cabin-pill">
+                      <input type="radio" name="cabinClass" value="business">
+                      <span>Business</span>
+                    </label>
+                    <label class="cabin-pill">
+                      <input type="radio" name="cabinClass" value="first">
+                      <span>First Class</span>
+                    </label>
+                  </div>
+                </div>
+
+                <button type="button" class="btn btn-secondary btn-sm apply-pax-btn" id="applyPaxBtn">Done</button>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="search-submit-card">
+              <button type="button" class="btn btn-primary search-flights-btn" id="searchFlightsBtn">
+                <i data-lucide="search" class="search-icon"></i>
+                <span class="btn-text">Find Flights</span>
+              </button>
+            </div>
+
+          </form>
+
+          <!-- Quick Route Suggestions (India Major Routes) -->
+          <div class="quick-routes-bar">
+            <span class="quick-lbl"><i data-lucide="trending-up"></i> Trending in India:</span>
+            <button type="button" class="quick-route-chip" data-from="DEL" data-to="BOM">Delhi ✈ Mumbai</button>
+            <button type="button" class="quick-route-chip" data-from="BLR" data-to="DEL">Bengaluru ✈ Delhi</button>
+            <button type="button" class="quick-route-chip" data-from="BOM" data-to="GOI">Mumbai ✈ Goa</button>
+            <button type="button" class="quick-route-chip" data-from="DEL" data-to="SXR">Delhi ✈ Srinagar</button>
+            <button type="button" class="quick-route-chip" data-from="HYD" data-to="COK">Hyderabad ✈ Kochi</button>
+            <button type="button" class="quick-route-chip" data-from="MAA" data-to="CCU">Chennai ✈ Kolkata</button>
+          </div>
+
+    <!-- AI Trip Assistant Banner -->
+    <section class="ai-banner-strip">
+      <div class="ai-strip-content">
+        <div class="ai-strip-left">
+          <div class="ai-sparkle-badge">
+            <i data-lucide="sparkles"></i> Flyora AI Copilot
+          </div>
+          <div class="ai-text">
+            <strong>Unsure where to holiday in India?</strong> Let our intelligent travel engine suggest budget-optimized itineraries, Kashmir snow trips, Goa beach deals, or weekend getaways under ₹5,000.
+          </div>
+        </div>
+        <button class="btn btn-glass" id="openAiDrawerBtn">
+          <i data-lucide="message-square-plus"></i> Open Travel Planner
+        </button>
+      </div>
+    </section>
+
+    <!-- Flight Results Section (Dynamic) -->
+    <section class="results-section" id="resultsSection">
+      <div class="results-container">
+        
+        <!-- Results Header & Summary -->
+        <div class="results-meta-header">
+          <div class="results-title-group">
+            <h2 class="results-main-title" id="resultsTitle">Flights from New Delhi to Mumbai</h2>
+            <p class="results-subtitle" id="resultsSubtitle">Showing live flights with real-time seat availability & lowest fare guarantee in INR (₹)</p>
+          </div>
+          
+          <div class="results-quick-stats">
+            <div class="stat-badge">
+              <span class="stat-lbl">Cheapest</span>
+              <strong class="stat-val" id="cheapestStatVal">₹3,499</strong>
+            </div>
+            <div class="stat-badge highlight">
+              <span class="stat-lbl">Fastest</span>
+              <strong class="stat-val" id="fastestStatVal">2h 10m</strong>
+            </div>
+            <div class="stat-badge">
+              <span class="stat-lbl">Direct Flights</span>
+              <strong class="stat-val" id="directCountVal">12 available</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-layout">
+          
+          <!-- Filters Sidebar -->
+          <aside class="filters-sidebar glass-panel" id="filtersSidebar">
+            <div class="filters-header">
+              <h3><i data-lucide="sliders-horizontal"></i> Filters</h3>
+              <button type="button" class="reset-filters-btn" id="resetFiltersBtn">Reset All</button>
+            </div>
+
+            <!-- Price Range Filter (INR) -->
+            <div class="filter-group">
+              <div class="filter-title-row">
+                <span class="filter-name">Max Price</span>
+                <span class="filter-val-badge" id="priceFilterDisplay">₹30,000</span>
+              </div>
+              <input type="range" id="priceRangeInput" class="range-slider" min="1500" max="30000" step="250" value="30000">
+              <div class="range-limits">
+                <span>₹1,500</span>
+                <span>₹30,000</span>
+              </div>
+            </div>
+
+            <!-- Stops Filter -->
+            <div class="filter-group">
+              <span class="filter-name">Stops</span>
+              <div class="filter-checkbox-list">
+                <label class="custom-checkbox">
+                  <input type="checkbox" name="stopsFilter" value="0" checked>
+                  <span class="checkmark"></span>
+                  <span class="cb-label">Non-Stop (Direct)</span>
+                </label>
+                <label class="custom-checkbox">
+                  <input type="checkbox" name="stopsFilter" value="1" checked>
+                  <span class="checkmark"></span>
+                  <span class="cb-label">1 Stop</span>
+                </label>
+                <label class="custom-checkbox">
+                  <input type="checkbox" name="stopsFilter" value="2" checked>
+                  <span class="checkmark"></span>
+                  <span class="cb-label">2+ Stops</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Airlines Filter -->
+            <div class="filter-group">
+              <span class="filter-name">Indian Airlines</span>
+              <div class="filter-checkbox-list" id="airlineFilterList">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Departure Time Filter -->
+            <div class="filter-group">
+              <span class="filter-name">Departure Time</span>
+              <div class="time-slot-grid">
+                <button type="button" class="time-slot-btn active" data-slot="all">Anytime</button>
+                <button type="button" class="time-slot-btn" data-slot="morning">Morning (06:00 - 12:00)</button>
+                <button type="button" class="time-slot-btn" data-slot="afternoon">Afternoon (12:00 - 18:00)</button>
+                <button type="button" class="time-slot-btn" data-slot="evening">Night (18:00 - 06:00)</button>
+              </div>
+            </div>
+
+            <!-- Amenities Filter -->
+            <div class="filter-group">
+              <span class="filter-name">Flight Features</span>
+              <div class="filter-checkbox-list">
+                <label class="custom-checkbox">
+                  <input type="checkbox" id="wifiFilter">
+                  <span class="checkmark"></span>
+                  <span class="cb-label"><i data-lucide="wifi" class="icon-sm"></i> Free High-Speed Wi-Fi / Power</span>
+                </label>
+                <label class="custom-checkbox">
+                  <input type="checkbox" id="powerFilter">
+                  <span class="checkmark"></span>
+                  <span class="cb-label"><i data-lucide="zap" class="icon-sm"></i> In-seat USB & Device Charging</span>
+                </label>
+                <label class="custom-checkbox">
+                  <input type="checkbox" id="freeMealFilter">
+                  <span class="checkmark"></span>
+                  <span class="cb-label"><i data-lucide="utensils" class="icon-sm"></i> Hot Indian Meal / Masala Chai</span>
+                </label>
+              </div>
+            </div>
+
+          </aside>
+
+          <!-- Flight List Main Column -->
+          <div class="flight-list-main">
+            
+            <!-- Sort Bar -->
+            <div class="sort-bar-tabs">
+              <button class="sort-tab active" data-sort="cheapest">
+                <i data-lucide="tag"></i>
+                <div class="sort-meta">
+                  <span class="sort-title">Cheapest</span>
+                  <span class="sort-hint" id="sortCheapestPrice">from ₹3,499</span>
+                </div>
+              </button>
+              <button class="sort-tab" data-sort="fastest">
+                <i data-lucide="zap"></i>
+                <div class="sort-meta">
+                  <span class="sort-title">Fastest</span>
+                  <span class="sort-hint" id="sortFastestDuration">2h 10m</span>
+                </div>
+              </button>
+              <button class="sort-tab" data-sort="best">
+                <i data-lucide="award"></i>
+                <div class="sort-meta">
+                  <span class="sort-title">Best Value (AI)</span>
+                  <span class="sort-hint">Smart balance</span>
+                </div>
+              </button>
+              <button class="sort-tab" data-sort="earliest">
+                <i data-lucide="clock"></i>
+                <div class="sort-meta">
+                  <span class="sort-title">Earliest Departure</span>
+                  <span class="sort-hint">06:00 AM</span>
+                </div>
+              </button>
+            </div>
+
+            <!-- Active Flights Container -->
+            <div class="flight-cards-container" id="flightCardsContainer">
+              <!-- Dynamically populated cards -->
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Live Flight Radar / Status Tracker Section -->
+    <section class="tracker-section" id="flightTracker">
+      <div class="section-container">
+        <div class="section-header-center">
+          <div class="section-badge"><i data-lucide="radar"></i> Live Telemetry</div>
+          <h2 class="section-title">Flyora India Real-time <span class="gradient-text">Flight Tracker</span></h2>
+          <p class="section-subtitle">Track any Indian domestic or international flight live with aircraft telemetry, cruising altitude, airspeed, and airport terminal weather.</p>
+        </div>
+
+        <div class="tracker-card glass-panel">
+          <div class="tracker-search-bar">
+            <div class="tracker-input-wrap">
+              <i data-lucide="plane"></i>
+              <input type="text" id="flightTrackerInput" placeholder="Enter Flight Number (e.g. 6E-205, AI-882, UK-994, QP-1102, SG-302)" value="6E-205">
+            </div>
+            <button class="btn btn-primary" id="trackFlightBtn">
+              <i data-lucide="crosshair"></i> Track Flight
+            </button>
+          </div>
+
+          <!-- Tracker Display Visual -->
+          <div class="tracker-display-grid" id="trackerDisplay">
+            
+            <div class="tracker-telemetry-col">
+              <div class="telemetry-badge-row">
+                <span class="flight-status-live-pill"><span class="pulse-dot"></span> EN ROUTE</span>
+                <span class="aircraft-type-lbl" id="trackerAircraftType">Airbus A321neo</span>
+              </div>
+              <h3 class="tracker-flight-code" id="trackerFlightCode">6E-205 • IndiGo Airlines</h3>
+              
+              <div class="tracker-route-visual">
+                <div class="tracker-node origin">
+                  <span class="node-code" id="trackerOriginCode">DEL</span>
+                  <span class="node-city" id="trackerOriginCity">New Delhi (DEL T3)</span>
+                  <span class="node-time" id="trackerDepTime">08:30 AM (Departed)</span>
+                </div>
+                
+                <div class="tracker-progress-track">
+                  <div class="tracker-plane-icon" id="trackerPlaneIcon" style="left: 64%;">
+                    <i data-lucide="plane" class="radar-plane-svg"></i>
+                  </div>
+                  <div class="tracker-progress-bar" id="trackerProgressBar" style="width: 64%;"></div>
+                </div>
+
+                <div class="tracker-node dest">
+                  <span class="node-code" id="trackerDestCode">BOM</span>
+                  <span class="node-city" id="trackerDestCity">Mumbai (CSMIA T2)</span>
+                  <span class="node-time" id="trackerArrTime">10:45 AM (Estimated)</span>
+                </div>
+              </div>
+
+              <!-- Telemetry gauges -->
+              <div class="gauges-grid">
+                <div class="gauge-card">
+                  <span class="gauge-lbl"><i data-lucide="arrow-up-right"></i> Altitude</span>
+                  <strong class="gauge-val" id="trackerAltitude">36,000 ft</strong>
+                  <span class="gauge-sub">FL360 Cruise</span>
+                </div>
+                <div class="gauge-card">
+                  <span class="gauge-lbl"><i data-lucide="gauge"></i> Ground Speed</span>
+                  <strong class="gauge-val" id="trackerSpeed">460 kts</strong>
+                  <span class="gauge-sub">850 km/h</span>
+                </div>
+                <div class="gauge-card">
+                  <span class="gauge-lbl"><i data-lucide="timer"></i> Time Remaining</span>
+                  <strong class="gauge-val" id="trackerRemaining">45m</strong>
+                  <span class="gauge-sub">On Schedule</span>
+                </div>
+                <div class="gauge-card">
+                  <span class="gauge-lbl"><i data-lucide="cloud-sun"></i> Dest Weather</span>
+                  <strong class="gauge-val" id="trackerWeather">28°C Mumbai</strong>
+                  <span class="gauge-sub">Clear Sky</span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular Indian Destinations Showcase -->
+    <section class="destinations-section" id="destinationsSection">
+      <div class="section-container">
+        <div class="section-header-split">
+          <div>
+            <div class="section-badge"><i data-lucide="globe"></i> Incredible India</div>
+            <h2 class="section-title">Discover Trending <span class="gradient-text">Indian Gateways</span></h2>
+            <p class="section-subtitle">Lowest domestic fares predicted by Flyora AI with instant 1-click booking in INR (₹).</p>
+          </div>
+          <div class="dest-filter-tabs">
+            <button class="dest-tab active" data-category="all">All</button>
+            <button class="dest-tab" data-category="beaches">Beaches & Coast</button>
+            <button class="dest-tab" data-category="mountains">Himalayas & North</button>
+            <button class="dest-tab" data-category="heritage">Heritage & Palaces</button>
+            <button class="dest-tab" data-category="nature">Nature & South</button>
+            <button class="dest-tab" data-category="spiritual">Spiritual Circuits</button>
+            <button class="dest-tab" data-category="metros">Metros</button>
+          </div>
+        </div>
+
+        <div class="destinations-grid" id="destinationsGrid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Flyora Feature Highlights -->
+    <section class="features-section" id="dealsSection">
+      <div class="section-container">
+        <div class="section-header-center">
+          <div class="section-badge"><i data-lucide="shield-check"></i> The Flyora Advantage</div>
+          <h2 class="section-title">Why Indian Flyers Choose <span class="gradient-text">Flyora</span></h2>
+          <p class="section-subtitle">Designed from the ground up for seamless, DGCA-compliant, and delightful domestic & international travel.</p>
+        </div>
+
+        <div class="features-grid">
+          
+          <div class="feature-card glass-panel">
+            <div class="feature-icon-box cyan">
+              <i data-lucide="brain"></i>
+            </div>
+            <h3>AI Domestic Fare Prediction</h3>
+            <p>Our machine learning models analyze 50M+ Indian route trends to tell you exactly when to book or hold for a price drop.</p>
+            <span class="feature-badge">99.6% Accuracy</span>
+          </div>
+
+          <div class="feature-card glass-panel">
+            <div class="feature-icon-box purple">
+              <i data-lucide="armchair"></i>
+            </div>
+            <h3>Interactive 3D Cabin Maps</h3>
+            <p>Choose your exact seat across A320, A321 & B737 layouts with real legroom previews and emergency exit highlights.</p>
+            <span class="feature-badge">True-to-Scale Layouts</span>
+          </div>
+
+          <div class="feature-card glass-panel">
+            <div class="feature-icon-box blue">
+              <i data-lucide="qr-code"></i>
+            </div>
+            <h3>Instant DigiYatra Boarding Passes</h3>
+            <p>Get instant DigiYatra & Apple/Google Wallet compatible passes with official IATA barcodes and express gate access.</p>
+            <span class="feature-badge">Express Airport Entry</span>
+          </div>
+
+          <div class="feature-card glass-panel">
+            <div class="feature-icon-box green">
+              <i data-lucide="leaf"></i>
+            </div>
+            <h3>Indian Afforestation Offset</h3>
+            <p>Compare flight carbon emissions per leg and automatically offset with certified native tree plantation drives across India.</p>
+            <span class="feature-badge">Eco-Certified</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+      <div class="section-container">
+        <div class="section-header-center">
+          <div class="section-badge"><i data-lucide="star"></i> Traveler Reviews</div>
+          <h2 class="section-title">Loved by <span class="gradient-text">2 Million+</span> Passengers</h2>
+          <p class="section-subtitle">Read genuine experiences from Indian frequent flyers and holiday travelers.</p>
+        </div>
+
+        <div class="testimonials-grid">
+          
+          <div class="testimonial-card glass-panel">
+            <div class="stars-row">
+              <i data-lucide="star" class="star-fill"></i>
+              <i data-lucide="star" class="star-fill"></i>
+              <i data-lucide="star" class="star-fill"></i>
+              <i data-lucide="star" class="star-fill"></i>
+              <i data-lucide="star" class="star-fill"></i>
+            </div>
+            <p class="testi-quote">“The seat map feature on IndiGo & Vistara flights is unrivaled. I booked front-row extra legroom for my Delhi-Bengaluru flight and the DigiYatra pass worked seamlessly!”</p>
+            <div class="testi-author">
+              <div class="avatar">AS</div>
+              <div>
+                <strong>Aarav Sharma</strong>
+                <span>Frequent Flyer • 48 Flights (Bengaluru)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card glass-panel">
+            <div class="stars-row">
+              <i data-lucide="star" class="star-fill"></i>
+              <i data-lucide="star" class="star-fill"></i>
+              <i data-lucide="star" class="star-fill"></i>
+              <i data-lucide="star" class="star-fill"></i>
+              <i data-lucide="star" class="star-fill"></i>
+            </div>
+            <p class="testi-quote">“Flyora's AI Copilot saved our family ₹8,500 on our Diwali holiday to Goa by suggesting a departure 2 days earlier. Flawless instant UPI payment & ticketing!”</p>
+            <div class="testi-author">
+              <div class="avatar">PD</div>
+              <div>
+                <strong>Priya Deshmukh</strong>
+                <span>Family Traveler • Mumbai</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card glass-panel">
+            <div class="stars-row">
+              <i data-lucide="star" class="star-fill"></i>
+              <i data-lucide="star" class="star-fill"></i>
+              <i data-lucide="star" class="star-fill"></i>
+              <i data-lucide="star" class="star-fill"></i>
+              <i data-lucide="star" class="star-fill"></i>
+            </div>
+            <p class="testi-quote">“Clean, dark-mode luxury design, transparent pricing in INR with zero hidden payment fees, and live flight radar so my cab was ready at Kochi airport. 10/10!”</p>
+            <div class="testi-author">
+              <div class="avatar">RM</div>
+              <div>
+                <strong>Rajesh Menon</strong>
+                <span>Tech Lead & Digital Nomad • Kochi</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter CTA -->
+    <section class="newsletter-section">
+      <div class="newsletter-card glass-panel">
+        <div class="nl-content">
+          <h2>Unlock Secret Airline Flash Fares & ₹1,000 Off Coupons</h2>
+          <p>Join 350,000+ smart Indian flyers receiving curated flash deals, festival fare alerts, and personalized trip suggestions.</p>
+          <form class="nl-form" id="newsletterForm" onsubmit="return false;">
+            <div class="nl-input-wrap">
+              <i data-lucide="mail"></i>
+              <input type="email" id="nlEmailInput" placeholder="Enter your email address" required>
+            </div>
+            <button type="submit" class="btn btn-primary" id="nlSubmitBtn">Subscribe Free</button>
+          </form>
+          <span class="nl-note"><i data-lucide="lock" class="icon-xs"></i> No spam. Instant ₹500 flight coupon emailed upon subscription.</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-top-grid">
+        
+        <div class="footer-brand-col">
+          <a href="#" class="brand-logo">
+            <div class="logo-icon-wrap">
+              <i data-lucide="plane" class="logo-icon"></i>
+            </div>
+            <div class="logo-text-wrap">
+              <span class="logo-name">Fly<span class="gradient-text">ora</span></span>
+            </div>
+          </a>
+          <p class="footer-desc">
+            Flyora is an intelligent aviation booking platform empowering travelers worldwide with AI-driven fare discovery, transparent pricing, and instant ticketing.
+          </p>
+          <div class="footer-socials">
+            <a href="#" class="social-icon" aria-label="Twitter"><i data-lucide="twitter"></i></a>
+            <a href="#" class="social-icon" aria-label="Instagram"><i data-lucide="instagram"></i></a>
+            <a href="#" class="social-icon" aria-label="Linkedin"><i data-lucide="linkedin"></i></a>
+            <a href="#" class="social-icon" aria-label="Github"><i data-lucide="github"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-links-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="#searchSection">Book Flights</a></li>
+            <li><a href="#flightTracker">Flight Status Radar</a></li>
+            <li><a href="#destinationsSection">Popular Destinations</a></li>
+            <li><a href="#dealsSection">Flash Fare Deals</a></li>
+            <li><a href="#">Airline Route Map</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <h4>Flyora Services</h4>
+          <ul>
+            <li><a href="#" id="footerAiLink">AI Travel Copilot</a></li>
+            <li><a href="#">Interactive Seat Selector</a></li>
+            <li><a href="#">Group Travel & Charters</a></li>
+            <li><a href="#">Carbon Offset Initiative</a></li>
+            <li><a href="#">Price Drop Guarantee</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <h4>Support & Legal</h4>
+          <ul>
+            <li><a href="#">24/7 Flight Support</a></li>
+            <li><a href="#">Baggage Guidelines</a></li>
+            <li><a href="#">Refund & Cancellation Policy</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Carriage</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom-bar">
+        <p>© 2026 Flyora Smart Flight Booking System. All rights reserved. IATA Accredited Partner.</p>
+        <div class="security-badges">
+          <span class="sec-badge"><i data-lucide="shield-check"></i> 256-Bit SSL Encrypted</span>
+          <span class="sec-badge"><i data-lucide="credit-card"></i> PCI-DSS Compliant</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================== -->
+  <!-- MODAL: MULTI-STEP BOOKING & CABIN SEAT SELECTOR -->
+  <!-- ============================================== -->
+  <div class="modal-overlay" id="bookingModalOverlay" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle">
+    <div class="modal-card glass-panel booking-modal-card">
+      
+      <!-- Modal Header & Stepper -->
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <h2 class="modal-title" id="bookingModalTitle">Complete Your Booking</h2>
+          <span class="modal-subtitle" id="modalFlightSummary">IndiGo 6E-205 • New Delhi (DEL) ➔ Mumbai (BOM)</span>
+        </div>
+        <button type="button" class="modal-close-btn" id="closeBookingModalBtn" aria-label="Close modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <!-- Step Indicator -->
+      <div class="stepper-indicator">
+        <div class="step-item active" data-step="1">
+          <div class="step-num">1</div>
+          <span class="step-name">Passenger Info</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="2">
+          <div class="step-num">2</div>
+          <span class="step-name">Seat Selection</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="3">
+          <div class="step-num">3</div>
+          <span class="step-name">Add-ons & Meals</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="4">
+          <div class="step-num">4</div>
+          <span class="step-name">Payment & Confirmation</span>
+        </div>
+      </div>
+
+      <!-- Modal Body (Dynamic Steps) -->
+      <div class="modal-body-content">
+        
+        <!-- STEP 1: Passenger Details -->
+        <div class="booking-step-page active" id="bookingStep1">
+          <div class="step-instruction">
+            <h3><i data-lucide="user-check"></i> Primary Passenger Information</h3>
+            <p>Please enter passenger names exactly as they appear on official Aadhaar, Passport, or government photo ID for DigiYatra verification.</p>
+          </div>
+
+          <form id="passengerForm" class="passenger-form-grid">
+            <div class="form-row col-2">
+              <div class="form-group">
+                <label for="paxFirstName">First / Given Name *</label>
+                <input type="text" id="paxFirstName" class="form-control" placeholder="e.g. Aarav" value="Aarav" required>
+              </div>
+              <div class="form-group">
+                <label for="paxLastName">Last / Family Name *</label>
+                <input type="text" id="paxLastName" class="form-control" placeholder="e.g. Sharma" value="Sharma" required>
+              </div>
+            </div>
+
+            <div class="form-row col-3">
+              <div class="form-group">
+                <label for="paxGender">Gender</label>
+                <select id="paxGender" class="form-control">
+                  <option value="male" selected>Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Undisclosed / Non-Binary</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="paxDob">Date of Birth *</label>
+                <input type="date" id="paxDob" class="form-control" value="1996-08-15" required>
+              </div>
+              <div class="form-group">
+                <label for="paxNationality">Nationality *</label>
+                <select id="paxNationality" class="form-control">
+                  <option value="IN" selected>India (IN)</option>
+                  <option value="US">United States (US)</option>
+                  <option value="GB">United Kingdom (GB)</option>
+                  <option value="AE">United Arab Emirates (AE)</option>
+                  <option value="SG">Singapore (SG)</option>
+                  <option value="CA">Canada (CA)</option>
+                  <option value="AU">Australia (AU)</option>
+                  <option value="DE">Germany (DE)</option>
+                  <option value="FR">France (FR)</option>
+                  <option value="JP">Japan (JP)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row col-2">
+              <div class="form-group">
+                <label for="paxEmail">Contact Email (for DigiYatra Boarding Pass & E-Ticket) *</label>
+                <input type="email" id="paxEmail" class="form-control" placeholder="name@example.com" value="aarav.sharma@example.com" required>
+              </div>
+              <div class="form-group">
+                <label for="paxPhone">Mobile Phone (with +91) *</label>
+                <input type="tel" id="paxPhone" class="form-control" placeholder="+91 98765 43210" value="+91 98765 43210" required>
+              </div>
+            </div>
+
+            <div class="form-row col-2">
+              <div class="form-group">
+                <label for="paxPassport">Aadhaar / Passport / Voter ID No.</label>
+                <input type="text" id="paxPassport" class="form-control" placeholder="XXXX-XXXX-4892" value="XXXX-XXXX-4892">
+              </div>
+              <div class="form-group">
+                <label for="paxFrequentFlyer">Frequent Flyer No. (6E Rewards / Club Vistara / Flying Returns)</label>
+                <input type="text" id="paxFrequentFlyer" class="form-control" placeholder="6E-882910" value="6E-882910">
+              </div>
+            </div>
+
+            <!-- Fare summary pill -->
+            <div class="booking-mini-summary glass-panel">
+              <div class="mini-summary-item">
+                <span>Selected Flight:</span>
+                <strong id="miniFlightAirline">IndiGo Airlines (Airbus A321neo)</strong>
+              </div>
+              <div class="mini-summary-item">
+                <span>Base Fare:</span>
+                <strong id="miniBaseFare">₹3,499.00</strong>
+              </div>
+            </div>
+
+          </form>
+        </div>
+
+        <!-- STEP 2: Interactive Cabin Seat Map -->
+        <div class="booking-step-page" id="bookingStep2">
+          <div class="step-instruction">
+            <h3><i data-lucide="armchair"></i> Select Your Airplane Seat</h3>
+            <p>Click on an available seat to assign your spot. Selected seat is highlighted in glowing cyan.</p>
+          </div>
+
+          <!-- Cabin Legend -->
+          <div class="seat-legend-bar">
+            <div class="legend-item"><span class="seat-sample available"></span> Available (Free)</div>
+            <div class="legend-item"><span class="seat-sample premium"></span> Extra Legroom (+₹450)</div>
+            <div class="legend-item"><span class="seat-sample selected"></span> Selected</div>
+            <div class="legend-item"><span class="seat-sample occupied"></span> Occupied</div>
+          </div>
+
+          <!-- Fuselage Layout -->
+          <div class="airplane-fuselage-wrap">
+            <div class="fuselage-nose">
+              <i data-lucide="plane" class="cockpit-icon"></i>
+              <span>Cockpit & Front Galley</span>
+            </div>
+
+            <!-- Cabin Sections -->
+            <div class="cabin-body" id="cabinBody">
+              <!-- Dynamically populated seat grid with aisles -->
+            </div>
+
+            <div class="fuselage-tail">
+              <span>Aft Galley & Lavatories</span>
+            </div>
+          </div>
+
+          <div class="selected-seat-badge-box">
+            <span class="badge-lbl">Your Assigned Seat:</span>
+            <strong class="badge-seat-num" id="selectedSeatNumDisplay">Seat 14B</strong>
+            <span class="badge-seat-price" id="selectedSeatPriceDisplay">(Free standard seat)</span>
+          </div>
+        </div>
+
+        <!-- STEP 3: Add-ons & Inflight Services -->
+        <div class="booking-step-page" id="bookingStep3">
+          <div class="step-instruction">
+            <h3><i data-lucide="sparkles"></i> Customize Your In-Flight Experience</h3>
+            <p>Add excess baggage, chef-curated hot Indian meals, DigiYatra FastTrack boarding, and domestic travel protection.</p>
+          </div>
+
+          <div class="addons-grid">
+            
+            <!-- Addon 1: Extra Baggage -->
+            <div class="addon-card glass-panel" data-addon="baggage">
+              <div class="addon-left">
+                <div class="addon-icon"><i data-lucide="luggage"></i></div>
+                <div class="addon-info">
+                  <h4>Extra 5kg Check-in Luggage</h4>
+                  <p>15kg check-in + 7kg cabin bag included. Add extra 5kg prepaid allowance with zero hassle.</p>
+                  <strong class="addon-price">+₹1,200.00</strong>
+                </div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="addonBaggageCheck">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <!-- Addon 2: Gourmet Meal -->
+            <div class="addon-card glass-panel" data-addon="meal">
+              <div class="addon-left">
+                <div class="addon-icon"><i data-lucide="utensils"></i></div>
+                <div class="addon-info">
+                  <h4>Hot Chef-Curated Indian Meal & Masala Chai</h4>
+                  <p>Choice of Paneer Butter Masala Thali, Hyderabadi Dum Biryani, or South Indian Tiffin Box.</p>
+                  <strong class="addon-price">+₹350.00</strong>
+                </div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="addonMealCheck">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <!-- Addon 3: Priority Boarding -->
+            <div class="addon-card glass-panel" data-addon="priority">
+              <div class="addon-left">
+                <div class="addon-icon"><i data-lucide="zap"></i></div>
+                <div class="addon-info">
+                  <h4>Flyora FastTrack™ Priority & DigiYatra Express Baggage</h4>
+                  <p>Dedicated DigiYatra fast lane access, Zone 1 early boarding, and priority bag delivery at baggage belt.</p>
+                  <strong class="addon-price">+₹299.00</strong>
+                </div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="addonPriorityCheck">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <!-- Addon 4: Comprehensive Travel Insurance -->
+            <div class="addon-card glass-panel" data-addon="insurance">
+              <div class="addon-left">
+                <div class="addon-icon"><i data-lucide="shield-check"></i></div>
+                <div class="addon-info">
+                  <h4>Flyora Care+ Domestic Travel & Medical Protection</h4>
+                  <p>100% refund for medical emergencies, flight delay compensation > 2h, and lost luggage cover up to ₹50,000.</p>
+                  <strong class="addon-price">+₹199.00</strong>
+                </div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="addonInsuranceCheck" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <!-- Addon 5: Carbon Neutrality -->
+            <div class="addon-card glass-panel" data-addon="carbon">
+              <div class="addon-left">
+                <div class="addon-icon"><i data-lucide="leaf"></i></div>
+                <div class="addon-info">
+                  <h4>100% Indian Afforestation & Carbon Neutral Offset</h4>
+                  <p>Offset carbon footprint with native tree plantation drives across the Western Ghats & Aravalli ranges.</p>
+                  <strong class="addon-price">+₹49.00</strong>
+                </div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="addonCarbonCheck">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- STEP 4: Review & Payment -->
+        <div class="booking-step-page" id="bookingStep4">
+          <div class="step-instruction">
+            <h3><i data-lucide="credit-card"></i> Review & Instant UPI / Card Confirmation</h3>
+            <p>Review your travel itinerary and finalize with instant UPI QR, RuPay/Cards, or NetBanking.</p>
+          </div>
+
+          <div class="checkout-layout">
+            
+            <!-- Summary breakdown -->
+            <div class="checkout-summary-card glass-panel">
+              <h4>Trip Summary</h4>
+              <div class="summary-line">
+                <span id="chkRoute">New Delhi (DEL) ➔ Mumbai (BOM)</span>
+                <strong id="chkBasePrice">₹3,499.00</strong>
+              </div>
+              <div class="summary-line">
+                <span>Passenger:</span>
+                <span id="chkPaxName">Aarav Sharma</span>
+              </div>
+              <div class="summary-line">
+                <span>Selected Seat:</span>
+                <strong id="chkSeatNum">14B (Standard - Free)</strong>
+              </div>
+              <div class="summary-line" id="chkAddonsRow">
+                <span>Add-ons & Extras:</span>
+                <span id="chkAddonsTotal">₹199.00</span>
+              </div>
+              <div class="summary-line">
+                <span>Taxes & Airport Development Fee:</span>
+                <span id="chkTaxes">₹550.00</span>
+              </div>
+              <div class="summary-divider"></div>
+              <div class="summary-total-line">
+                <span>Total Amount Due:</span>
+                <strong class="grand-total" id="chkGrandTotal">₹4,248.00</strong>
+              </div>
+              <div class="safe-badge">
+                <i data-lucide="lock"></i> 100% Price Lock with DGCA 24-Hour Free Cancellation & Instant UPI Refund
+              </div>
+            </div>
+
+            <!-- Payment Form -->
+            <div class="payment-box glass-panel">
+              <h4>Payment Method</h4>
+              <div class="payment-tabs">
+                <button type="button" class="pay-tab active" id="payTabUpi"><i data-lucide="smartphone"></i> UPI / QR Code</button>
+                <button type="button" class="pay-tab" id="payTabCard"><i data-lucide="credit-card"></i> RuPay / Cards</button>
+                <button type="button" class="pay-tab" id="payTabNet"><i data-lucide="landmark"></i> NetBanking</button>
+              </div>
+
+              <!-- UPI Mode -->
+              <div class="pay-form" id="payFormUpi">
+                <div class="upi-box glass-panel" style="padding: 14px; background: rgba(0, 242, 254, 0.04); border-radius: var(--radius-sm); border: 1px dashed var(--brand-cyan);">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="font-weight: 600; font-size: 0.88rem; color: var(--text-primary);"><i data-lucide="qr-code"></i> Scan UPI QR Code</span>
+                    <span style="font-size: 0.75rem; color: var(--brand-cyan); font-weight: 600;">GPay • PhonePe • Paytm • BHIM</span>
+                  </div>
+                  <div style="display: flex; gap: 14px; align-items: center;">
+                    <div style="width: 72px; height: 72px; background: #fff; border-radius: 6px; padding: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                      <div class="mock-qr-code" style="width: 64px; height: 64px;"></div>
+                    </div>
+                    <div style="font-size: 0.78rem; color: var(--text-secondary);">
+                      Scan with any UPI app on your phone or enter Virtual Payment Address (VPA) below.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="upiId">Or Enter UPI ID / VPA</label>
+                  <div class="input-with-icon">
+                    <i data-lucide="at-sign"></i>
+                    <input type="text" id="upiId" class="form-control" placeholder="username@okhdfcbank" value="aarav.sharma@oksbi">
+                  </div>
+                </div>
+
+                <div class="secure-checkout-msg">
+                  <i data-lucide="shield-check"></i> Verified by NPCI • 256-Bit Bank Level SSL Sandbox
+                </div>
+              </div>
+
+              <!-- Card Form -->
+              <div class="pay-form" id="payFormCard" style="display: none;">
+                <div class="form-group">
+                  <label for="ccNumber">Card Number (RuPay / Visa / MasterCard)</label>
+                  <div class="input-with-icon">
+                    <i data-lucide="credit-card"></i>
+                    <input type="text" id="ccNumber" class="form-control" placeholder="6074 •••• •••• 4242" value="6074 8921 7844 9012" maxlength="19">
+                  </div>
+                </div>
+
+                <div class="form-row col-2">
+                  <div class="form-group">
+                    <label for="ccExpiry">Expiration Date</label>
+                    <input type="text" id="ccExpiry" class="form-control" placeholder="MM/YY" value="08/28" maxlength="5">
+                  </div>
+                  <div class="form-group">
+                    <label for="ccCvc">Security CVV</label>
+                    <input type="password" id="ccCvc" class="form-control" placeholder="CVV" value="789" maxlength="4">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="ccName">Cardholder Name</label>
+                  <input type="text" id="ccName" class="form-control" placeholder="Name on Card" value="AARAV SHARMA">
+                </div>
+
+                <div class="secure-checkout-msg">
+                  <i data-lucide="shield-check"></i> RuPay / RBI 2-Factor Authentication Protected
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer Controls -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-glass" id="modalBackBtn" style="visibility: hidden;">
+          <i data-lucide="arrow-left"></i> Back
+        </button>
+
+        <div class="modal-footer-right">
+          <div class="modal-live-total">
+            <span>Total:</span>
+            <strong id="modalFooterTotal">₹4,248.00</strong>
+          </div>
+          <button type="button" class="btn btn-primary" id="modalNextBtn">
+            <span>Continue to Seats</span> <i data-lucide="arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: DIGITAL BOARDING PASS & TICKET RECEIPT  -->
+  <!-- ============================================== -->
+  <div class="modal-overlay" id="boardingPassOverlay" role="dialog" aria-modal="true">
+    <div class="modal-card glass-panel boarding-pass-modal-card">
+      <div class="boarding-modal-header">
+        <div class="success-pill">
+          <i data-lucide="check-circle-2"></i> Booking Confirmed!
+        </div>
+        <button type="button" class="modal-close-btn" id="closeBoardingPassBtn" aria-label="Close pass">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <!-- Realistic Boarding Pass Graphic -->
+      <div class="boarding-pass" id="printableBoardingPass">
+        
+        <!-- Pass Main Section -->
+        <div class="pass-main">
+          <div class="pass-header-row">
+            <div class="pass-airline-brand">
+              <div class="pass-logo-badge"><i data-lucide="plane"></i></div>
+              <strong id="passAirlineName">IndiGo Airlines</strong>
+            </div>
+            <div class="pass-type-badge" id="passCabinBadge">ECONOMY • DIGIYATRA</div>
+          </div>
+
+          <div class="pass-route-row">
+            <div class="route-city-block">
+              <span class="city-code" id="passOriginCode">DEL</span>
+              <span class="city-name" id="passOriginName">New Delhi (DEL)</span>
+            </div>
+            
+            <div class="route-plane-visual">
+              <div class="duration-label" id="passDuration">2h 15m</div>
+              <div class="flight-line-dot">
+                <span class="line-dot"></span>
+                <i data-lucide="plane" class="line-plane-icon"></i>
+                <span class="line-dot"></span>
+              </div>
+              <div class="flight-number-sub" id="passFlightNo">6E-205</div>
+            </div>
+
+            <div class="route-city-block text-right">
+              <span class="city-code" id="passDestCode">BOM</span>
+              <span class="city-name" id="passDestName">Mumbai (CSMIA)</span>
+            </div>
+          </div>
+
+          <div class="pass-details-grid">
+            <div class="detail-cell">
+              <span class="cell-lbl">PASSENGER</span>
+              <strong class="cell-val" id="passPaxName">SHARMA / AARAV MR</strong>
+            </div>
+            <div class="detail-cell">
+              <span class="cell-lbl">FLIGHT</span>
+              <strong class="cell-val" id="passFlightCode">6E-205</strong>
+            </div>
+            <div class="detail-cell">
+              <span class="cell-lbl">DATE</span>
+              <strong class="cell-val" id="passDate">15 OCT 2026</strong>
+            </div>
+            <div class="detail-cell">
+              <span class="cell-lbl">BOARDING TIME</span>
+              <strong class="cell-val highlight" id="passBoardingTime">07:45 AM</strong>
+            </div>
+            <div class="detail-cell">
+              <span class="cell-lbl">GATE</span>
+              <strong class="cell-val highlight" id="passGate">42A</strong>
+            </div>
+            <div class="detail-cell">
+              <span class="cell-lbl">SEAT</span>
+              <strong class="cell-val highlight-seat" id="passSeat">14B</strong>
+            </div>
+            <div class="detail-cell">
+              <span class="cell-lbl">ZONE / VERIFICATION</span>
+              <strong class="cell-val" id="passZone">ZONE 1 (DigiYatra)</strong>
+            </div>
+            <div class="detail-cell">
+              <span class="cell-lbl">E-TICKET / PNR</span>
+              <strong class="cell-val" id="passPnr">6E-IND782</strong>
+            </div>
+          </div>
+
+          <!-- Barcode simulation -->
+          <div class="pass-barcode-wrap">
+            <div class="barcode-lines"></div>
+            <span class="barcode-text" id="passBarcodeText">M1SHARMA/AARAV E-TKT 016789421598 DEL BOM 6E 205 14B 42A DIGIYATRA</span>
+          </div>
+
+        </div>
+
+        <!-- Perforated Tear Line -->
+        <div class="pass-perforation">
+          <div class="cutout-circle top"></div>
+          <div class="perforated-dash-line"></div>
+          <div class="cutout-circle bottom"></div>
+        </div>
+
+        <!-- Pass Stub / Tear-off Stub -->
+        <div class="pass-stub">
+          <div class="stub-header">
+            <span>DIGIYATRA STUB</span>
+            <i data-lucide="plane"></i>
+          </div>
+          
+          <div class="stub-details">
+            <div class="stub-cell">
+              <span>PASSENGER</span>
+              <strong id="stubPaxName">SHARMA / AARAV</strong>
+            </div>
+            <div class="stub-cell">
+              <span>FLIGHT / DATE</span>
+              <strong id="stubFlightDate">6E-205 • 15 OCT</strong>
+            </div>
+            <div class="stub-cell">
+              <span>FROM / TO</span>
+              <strong id="stubRoute">DEL ➔ BOM</strong>
+            </div>
+            <div class="stub-row-split">
+              <div>
+                <span>GATE</span>
+                <strong id="stubGate">42A</strong>
+              </div>
+              <div>
+                <span>SEAT</span>
+                <strong class="stub-seat" id="stubSeat">14B</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- QR Code simulation -->
+          <div class="stub-qr-box">
+            <div class="mock-qr-code" id="mockQrCode"></div>
+            <span class="qr-sub">DigiYatra Gate Scan</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="boarding-actions">
+        <button class="btn btn-secondary" id="printPassBtn">
+          <i data-lucide="printer"></i> Print Boarding Pass
+        </button>
+        <button class="btn btn-primary" id="saveTripBtn">
+          <i data-lucide="bookmark-check"></i> Save to My Trips
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- FLYORA AI COPILOT DRAWER / MODAL               -->
+  <!-- ============================================== -->
+  <div class="ai-drawer-overlay" id="aiDrawerOverlay">
+    <div class="ai-drawer-panel glass-panel">
+      
+      <div class="ai-drawer-header">
+        <div class="ai-header-brand">
+          <div class="ai-bot-avatar">
+            <i data-lucide="bot"></i>
+          </div>
+          <div>
+            <h3>Flyora AI Copilot</h3>
+            <span class="ai-status"><span class="pulse-dot"></span> Online • Indian Skies AI Engine</span>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="closeAiDrawerBtn" aria-label="Close AI Assistant">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <!-- Chat History -->
+      <div class="ai-chat-body" id="aiChatBody">
+        <div class="ai-msg bot">
+          <div class="ai-avatar-mini"><i data-lucide="bot"></i></div>
+          <div class="msg-bubble">
+            Namaste! I'm your <strong>Flyora AI Copilot</strong> ✈️. I can help you find cheap domestic flights across India, explain DGCA baggage rules, plan holiday getaways (Goa, Kashmir, Kerala, Ladakh), or find festival travel discounts in INR (₹).
+            <div class="quick-prompts-grid">
+              <button type="button" class="ai-prompt-chip" data-prompt="Find cheapest flights to Goa for a weekend trip from Delhi or Mumbai">🏖️ Goa Weekend under ₹4,000</button>
+              <button type="button" class="ai-prompt-chip" data-prompt="Best time to visit Srinagar and Ladakh with family and flight costs">🏔️ Kashmir & Ladakh Trip Tips</button>
+              <button type="button" class="ai-prompt-chip" data-prompt="What are the baggage allowances on IndiGo and Air India domestic flights?">🧳 DGCA Baggage Rules</button>
+              <button type="button" class="ai-prompt-chip" data-prompt="Suggest a spiritual flight route for Varanasi, Ayodhya, and Tirupati">🕉️ Spiritual Circuit Tour</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input -->
+      <div class="ai-chat-input-area">
+        <form id="aiChatForm" class="ai-form" onsubmit="return false;">
+          <input type="text" id="aiChatInput" placeholder="Ask Flyora AI anything about Indian flights & travel..." autocomplete="off">
+          <button type="submit" class="ai-send-btn" id="aiSendBtn" aria-label="Send message">
+            <i data-lucide="send"></i>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MY TRIPS / SAVED BOOKINGS DRAWER               -->
+  <!-- ============================================== -->
+  <div class="trips-drawer-overlay" id="tripsDrawerOverlay">
+    <div class="trips-drawer-panel glass-panel">
+      <div class="trips-drawer-header">
+        <div class="header-left">
+          <i data-lucide="ticket" class="icon-lg"></i>
+          <div>
+            <h3>My Booked Flights</h3>
+            <span class="trips-count-sub" id="tripsDrawerCountSub">0 Active Itineraries</span>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="closeTripsDrawerBtn" aria-label="Close Trips">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="trips-drawer-content" id="savedTripsContainer">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
